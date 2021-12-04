@@ -1,25 +1,24 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from 'react';
+import supabase from './config/supabase';
+
+import StudentAuth from './views/StudentAuth';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const getData = async () => {
+        const { data, error } = await supabase
+            .from('outpass')
+            .select('*')
+            .eq('parent_consent', true)
+            .single();
+        console.log(data, error);
+        if (!error) setData(data);
+    };
+    useEffect(() => {
+        getData();
+    }, []);
+    const [data, setData] = useState({});
+    // return <div>{`${JSON.stringify(data)}`}</div>;
+    return <StudentAuth />;
 }
 
 export default App;
